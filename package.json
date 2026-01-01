@@ -1,0 +1,25 @@
+{
+  "name": "ruscord",
+  "version": "1.0.0",
+  "description": "Discord/Messenger clone built with HTML, CSS, and JavaScript",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [
+    "discord-clone",
+    "messenger",
+    "chat-app",
+    "real-time",
+    "javascript"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
