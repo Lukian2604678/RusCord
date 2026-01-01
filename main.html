@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RusCord</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar - Servers List -->
+        <div class="servers-sidebar">
+            <div class="server-item active" id="home-server" data-server="home">
+                <i class="fas fa-home"></i>
+                <span class="tooltip">Home</span>
+            </div>
+            <div class="server-divider"></div>
+            <div id="servers-list">
+                <!-- Servers will be dynamically added here -->
+            </div>
+            <div class="server-item add-server" id="add-server-btn">
+                <i class="fas fa-plus"></i>
+                <span class="tooltip">Add a Server</span>
+            </div>
+        </div>
+        
+        <!-- Channels Sidebar -->
+        <div class="channels-sidebar">
+            <div class="server-header">
+                <h2 id="current-server-name">Direct Messages</h2>
+                <i class="fas fa-chevron-down" id="server-dropdown"></i>
+            </div>
+            
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search">
+            </div>
+            
+            <!-- Channels List -->
+            <div class="channels-section">
+                <div class="section-header">
+                    <h3>DIRECT MESSAGES</h3>
+                    <i class="fas fa-plus" id="add-friend-btn"></i>
+                </div>
+                <div id="direct-messages-list">
+                    <!-- DMs will be dynamically added here -->
+                </div>
+            </div>
+            
+            <!-- Voice Channels -->
+            <div class="channels-section">
+                <div class="section-header">
+                    <h3>VOICE CHANNELS</h3>
+                    <i class="fas fa-plus" id="add-voice-btn"></i>
+                </div>
+                <div id="voice-channels-list">
+                    <!-- Voice channels will be dynamically added here -->
+                </div>
+            </div>
+            
+            <!-- User Profile -->
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <img id="user-avatar-img" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Demo" alt="User Avatar">
+                </div>
+                <div class="user-info">
+                    <span id="current-username">DemoUser</span>
+                    <span class="user-status" id="current-user-status">Online</span>
+                </div>
+                <div class="user-actions">
+                    <button class="icon-btn" id="mic-btn"><i class="fas fa-microphone"></i></button>
+                    <button class="icon-btn" id="headphone-btn"><i class="fas fa-headphones"></i></button>
+                    <button class="icon-btn" id="settings-btn"><i class="fas fa-cog"></i></button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Chat Area -->
+        <div class="main-chat">
+            <!-- Chat Header -->
+            <div class="chat-header">
+                <div class="chat-header-info">
+                    <i class="fas fa-hashtag"></i>
+                    <h3 id="current-channel-name">general</h3>
+                </div>
+                <div class="chat-header-actions">
+                    <div class="search-chat">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search">
+                    </div>
+                    <button class="icon-btn" id="pin-btn" title="Pinned Messages">
+                        <i class="fas fa-thumbtack"></i>
+                    </button>
+                    <button class="icon-btn" id="member-list-btn" title="Member List">
+                        <i class="fas fa-user-friends"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Messages Container -->
+            <div class="messages-container" id="messages-container">
+                <!-- Messages will be dynamically added here -->
+                <div class="welcome-message">
+                    <h2>Welcome to #general!</h2>
+                    <p>This is the start of the #general channel. Say hello to everyone!</p>
+                </div>
+            </div>
+            
+            <!-- Message Input -->
+            <div class="message-input-container">
+                <div class="message-input-actions">
+                    <button class="icon-btn"><i class="fas fa-plus"></i></button>
+                    <button class="icon-btn"><i class="fas fa-gift"></i></button>
+                    <button class="icon-btn"><i class="fas fa-image"></i></button>
+                </div>
+                <div class="message-input-wrapper">
+                    <input type="text" id="message-input" placeholder="Message #general">
+                    <div class="input-actions">
+                        <button class="icon-btn"><i class="fas fa-at"></i></button>
+                        <button class="icon-btn"><i class="fas fa-smile"></i></button>
+                    </div>
+                </div>
+                <button class="icon-btn send-btn" id="send-message-btn">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Members Sidebar -->
+        <div class="members-sidebar">
+            <div class="members-header">
+                <h3>MEMBERS — <span id="members-count">1</span></h3>
+                <input type="text" placeholder="Search members">
+            </div>
+            <div class="members-list" id="members-list">
+                <!-- Members will be dynamically added here -->
+            </div>
+        </div>
+        
+        <!-- Modals -->
+        <div class="modal-overlay" id="modal-overlay"></div>
+        
+        <!-- Add Server Modal -->
+        <div class="modal" id="add-server-modal">
+            <div class="modal-header">
+                <h3>Create a Server</h3>
+                <button class="close-modal" id="close-add-server-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Your server is where you and your friends hang out. Make yours and start talking.</p>
+                <div class="server-creation">
+                    <div class="server-image-upload">
+                        <div class="image-upload-placeholder">
+                            <i class="fas fa-camera"></i>
+                            <span>Upload</span>
+                        </div>
+                        <input type="file" id="server-image-input" accept="image/*" hidden>
+                    </div>
+                    <div class="form-group">
+                        <label for="server-name">SERVER NAME</label>
+                        <input type="text" id="server-name" placeholder="Enter server name">
+                    </div>
+                    <div class="form-group">
+                        <label for="server-region">SERVER REGION</label>
+                        <select id="server-region">
+                            <option value="us-east">US East</option>
+                            <option value="us-west">US West</option>
+                            <option value="europe">Europe</option>
+                            <option value="asia">Asia</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancel-add-server">Cancel</button>
+                <button class="btn-primary" id="create-server-btn">Create Server</button>
+            </div>
+        </div>
+        
+        <!-- Add Friend Modal -->
+        <div class="modal" id="add-friend-modal">
+            <div class="modal-header">
+                <h3>Add Friend</h3>
+                <button class="close-modal" id="close-add-friend-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>You can add friends with their RusCord username.</p>
+                <div class="form-group">
+                    <input type="text" id="friend-username" placeholder="Enter a username#0000">
+                    <button class="btn-primary" id="send-friend-request">Send Friend Request</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- User Settings Modal -->
+        <div class="modal" id="settings-modal">
+            <div class="modal-header">
+                <h3>User Settings</h3>
+                <button class="close-modal" id="close-settings-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="settings-tabs">
+                    <button class="settings-tab active" data-tab="account">My Account</button>
+                    <button class="settings-tab" data-tab="profile">User Profile</button>
+                    <button class="settings-tab" data-tab="privacy">Privacy & Safety</button>
+                </div>
+                
+                <div class="settings-content">
+                    <div class="settings-pane active" id="account-pane">
+                        <h4>Account Information</h4>
+                        <div class="form-group">
+                            <label>USERNAME</label>
+                            <input type="text" id="settings-username" value="DemoUser">
+                            <button class="btn-secondary">Update</button>
+                        </div>
+                        <div class="form-group">
+                            <label>EMAIL</label>
+                            <input type="email" id="settings-email" value="demo@ruscord.com">
+                            <button class="btn-secondary">Update</button>
+                        </div>
+                        <div class="form-group">
+                            <label>PASSWORD</label>
+                            <input type="password" id="settings-password" placeholder="New password">
+                            <button class="btn-secondary">Change Password</button>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-pane" id="profile-pane">
+                        <h4>Profile Settings</h4>
+                        <div class="avatar-upload">
+                            <div class="avatar-preview">
+                                <img id="settings-avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Demo" alt="Avatar">
+                            </div>
+                            <button class="btn-secondary" id="change-avatar-btn">Change Avatar</button>
+                        </div>
+                        <div class="form-group">
+                            <label>STATUS</label>
+                            <select id="user-status">
+                                <option value="online">Online</option>
+                                <option value="idle">Idle</option>
+                                <option value="dnd">Do Not Disturb</option>
+                                <option value="invisible">Invisible</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>ABOUT ME</label>
+                            <textarea id="user-bio" placeholder="Tell us about yourself"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-pane" id="privacy-pane">
+                        <h4>Privacy Settings</h4>
+                        <div class="form-group checkbox">
+                            <input type="checkbox" id="allow-dms" checked>
+                            <label for="allow-dms">Allow direct messages from server members</label>
+                        </div>
+                        <div class="form-group checkbox">
+                            <input type="checkbox" id="friend-requests" checked>
+                            <label for="friend-requests">Allow friend requests</label>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn-primary" id="logout-btn">Log Out</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="db.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
